@@ -20,7 +20,12 @@ Syntax highlighted code block
 
 1. Numbered
 2. List
+
+## Páginas
+
 [Planetário Interativo](https://github.com/wwagner33/wwagner33.github.io/planetarium.html)
+[Ladrilho Interativo](https://github.com/wwagner33/wwagner33.github.io/ladrilho.html)
+
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
