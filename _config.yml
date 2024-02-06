@@ -1,1 +1,6 @@
-theme: jekyll-theme-minimal
+defaults:
+  - scope:
+      path: ""
+    values:
+      headers:
+        Access-Control-Allow-Origin: "https://dominio-do-lattes-api.com https://dominio-do-dblp-api.com"
