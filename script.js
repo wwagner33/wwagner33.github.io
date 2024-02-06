@@ -1,7 +1,8 @@
 function loadDBLPData() {
     // Defina a URL do endpoint da API DBLP com seus parâmetros de consulta
     const query = 'aprendizado de máquina'; // Substitua pela sua consulta desejada
-    const apiUrl = `https://dblp.org/search/api/?q=${query}&format=json`;
+    const apiUrl = `https://cors.io/?https://dblp.org/search/api/?q=${query}&format=json`;
+
 
     // Faça uma solicitação HTTP para a API DBLP
     fetch(apiUrl)
