@@ -2,46 +2,29 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Consulta DBLP API com XML</title>
+    <title>Consulta DBLP API</title>
 </head>
 <body>
-    <h1>Consulta DBLP API com XML</h1>
+    <h1>Consulta DBLP API</h1>
     <button onclick="loadDBLPData()">Carregar Dados</button>
     <div id="dblpData"></div>
 
     <script>
         function loadDBLPData() {
+            // Defina a URL da API DBLP com seus parâmetros de consulta
             const query = 'aprendizado de máquina'; // Substitua pela sua consulta desejada
-            const apiUrl = 'https://dblp.org/search/api';
+            const apiUrl = `https://dblp.org/search/api/?q=${query}&format=json`;
 
-            // Crie um objeto XML com o seu conteúdo
-            const xmlData = `
-                <query>
-                    <title>${query}</title>
-                </query>
-            `;
+            // Crie um elemento de script dinamicamente para carregar os dados usando JSONP
+            const scriptElement = document.createElement('script');
+            scriptElement.src = apiUrl;
+            document.body.appendChild(scriptElement);
 
-            // Faça uma solicitação HTTP POST para a API do DBLP com o XML
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/xml',
-                },
-                body: xmlData,
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('A resposta da rede não foi bem-sucedida');
-                }
-                return response.json();
-            })
-            .then(data => {
+            // JSONP chamará a função 'dblpCallback' quando os dados estiverem prontos
+            window.dblpCallback = function(data) {
                 // Manipule os dados recebidos da API
                 exibirDadosDBLP(data);
-            })
-            .catch(error => {
-                console.error('Houve um problema com a operação de busca:', error);
-            });
+            };
         }
 
         function exibirDadosDBLP(data) {
