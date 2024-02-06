@@ -1,7 +1,18 @@
 theme: jekyll-theme-minimal
+lsi: false
+safe: true
+source: /
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
 defaults:
   - scope:
-      path: ""
+      path: "https://wwwagner33.github.io"
     values:
       headers:
         Access-Control-Allow-Origin: "https://dominio-do-lattes-api.com https://dominio-do-dblp-api.com"
