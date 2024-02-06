@@ -3,7 +3,7 @@ title: Web Site do Wellington
 email: wwagner@virtual.ufc.br
 description: > # this means to ignore newlines until "baseurl:"
   Este é meu web site.
-baseurl: "/www" # the subpath of your site, e.g. /blog/
+baseurl: "/testes/" # the subpath of your site, e.g. /blog/
 url: "http://wwagner33.github.io" # the base hostname & protocol for your site
 github_username:  wwagner33
 
