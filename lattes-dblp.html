@@ -2,21 +2,33 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Consulta DBLP API</title>
+    <title>Consulta DBLP API com XML</title>
 </head>
 <body>
-    <h1>Consulta DBLP API</h1>
+    <h1>Consulta DBLP API com XML</h1>
     <button onclick="loadDBLPData()">Carregar Dados</button>
     <div id="dblpData"></div>
 
     <script>
         function loadDBLPData() {
-            // Defina a URL do endpoint da API DBLP com seus parâmetros de consulta
-            const query = 'Wellington Wagner Ferreira Sarmento'; // Substitua pela sua consulta desejada
-            const apiUrl = `https://dblp.org/search/api/?q=${query}&format=json`;
+            const query = 'aprendizado de máquina'; // Substitua pela sua consulta desejada
+            const apiUrl = 'https://dblp.org/search/api';
 
-            // Faça uma solicitação HTTP para a API DBLP
-            fetch(apiUrl)
+            // Crie um objeto XML com o seu conteúdo
+            const xmlData = `
+                <query>
+                    <title>${query}</title>
+                </query>
+            `;
+
+            // Faça uma solicitação HTTP POST para a API do DBLP com o XML
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml',
+                },
+                body: xmlData,
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('A resposta da rede não foi bem-sucedida');
