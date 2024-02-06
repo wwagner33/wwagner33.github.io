@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Consulta DBLP API</title>
+    <title>Publica&ccedil;&otil;es</title>
 </head>
 <body>
-    <h1>Consulta DBLP API</h1>
+    <h1>Minhas Publicações</h1>
     <button onclick="loadDBLPData()">Carregar Dados</button>
     <div id="dblpData"></div>
 
@@ -13,33 +13,36 @@
         function loadDBLPData() {
             // Defina a URL da API DBLP com seus parâmetros de consulta
             const query = 'Wellington Wagner Ferreira Sarmento'; // Substitua pela sua consulta desejada
-            const apiUrl = `https://dblp.org/search/api/?q=${query}&format=jsonp`;
+            const apiUrl = `https://dblp.org/search/api/?q=${query}&format=json`;
 
-            // Crie um elemento de script dinamicamente para carregar os dados usando JSONP
-            const scriptElement = document.createElement('script');
-            scriptElement.src = apiUrl;
-            document.body.appendChild(scriptElement);
-
-            // JSONP chamará a função 'dblpCallback' quando os dados estiverem prontos
-            window.dblpCallback = function(data) {
-                // Manipule os dados recebidos da API
-                exibirDadosDBLP(data);
-            };
+            // Faça uma solicitação HTTP GET para a API DBLP usando fetch
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('A resposta da rede não foi bem-sucedida');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Manipule os dados recebidos da API
+                    exibirDadosDBLP(data);
+                })
+                .catch(error => {
+                    console.error('Houve um problema com a operação de busca:', error);
+                });
         }
 
         function exibirDadosDBLP(data) {
             const dblpDataElement = document.getElementById('dblpData');
             
-            // Itere pelos resultados e exiba-os conforme necessário
+            // Itere pelos resultados e exiba todos os campos retornados
             let resultHtml = '<h2>Resultados:</h2>';
             for (const entry of data.result.hits.hit) {
-                resultHtml += `
-                    <p>Título: ${entry.info.title}</p>
-                    <p>Autores: ${entry.info.authors}</p>
-                    <p>Ano: ${entry.info.year}</p>
-                    <p>URL: <a href="${entry.info.url}" target="_blank">${entry.info.url}</a></p>
-                    <hr>
-                `;
+                resultHtml += '<div>';
+                for (const key in entry.info) {
+                    resultHtml += `<p><strong>${key}:</strong> ${entry.info[key]}</p>`;
+                }
+                resultHtml += '</div><hr>';
             }
             
             dblpDataElement.innerHTML = resultHtml;
