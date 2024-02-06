@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dados do Wellington</title>
+</head>
+<body>
+    <h1>Consulta Lattes API</h1>
+    <button onclick="loadLattesData()">Carregar Dados</button>
+    <div id="lattesData"></div>
+
+    <script>
+        function loadLattesData() {        
+            const apiKey = 'YOUR_API_KEY';
+            const apiUrl = 'https://api.lattes.cnpq.br/v1/pessoa';
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayLattesData(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+        function displayLattesData(data) {
+            const lattesDataElement = document.getElementById('lattesData');
+            
+            lattesDataElement.innerHTML = `
+                <h2>Nome: ${data.nome}</h2>
+                <p>Área de atuação: ${data.area}</p>
+                <p>Instituição: ${data.instituicao}</p>
+                <p>ID Lattes: ${data.idLattes}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
