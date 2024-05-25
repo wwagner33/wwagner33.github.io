@@ -1,42 +1,52 @@
-## Welcome to GitHub Pages
+# Wellington Wagner Ferreira Sarmento
 
-You can use the [editor on GitHub](https://github.com/wwagner33/wwagner33.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+## Master of Engineering, Professor
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Institution and Department
+**Universidade Federal do Ceará**  
+**Instituto Universidade Virtual - UFC Virtual**
 
-### Markdown
+## Skills
+- Ubiquitous Computing
+- Software Development
+- Computational Intelligence
+- Distance Education
+- Swarm Intelligence
+- Marxism Theory
+- Mobile Technology
+- Virtual Learning Environments
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Introduction
+As a doctoral student in Electrical Engineering (2020 - present), I serve as a Professor (Professor Adjunto IV) in the Digital Systems and Media course at Universidade Federal do Ceará (Federal University of Ceará). My research focuses on Virtual Learning Environments (VLE), Ubiquitous Learning, IoT, and Application Frameworks. I am a co-creator of the VLEs Solar, Solar Mobilis, and Socrates.
 
-```markdown
-Syntax highlighted code block
+## Disciplines
+- Multimedia Programming
+- Computer Programming
+- Computer Architecture
+- Computer Networks
+- Operating Systems
+- Artificial Intelligence
+- Programming for Embeded System
 
-# Header 1
-## Header 2
-### Header 3
+## Skills and Expertise
+- Virtual Learning Environments
+- Ubiquitous Computing
+- Computational Intelligence
+- Distance Education
+- Swarm Intelligence
+- Marxism
+- Mobile Technology
 
-- Bulleted
-- List
+## Contact
+Feel free to reach out to me:
+- Email: [wwagner@virtual.ufc.br](mailto:wwagner@virtual.ufc.br)
+- GitHub: [wwagner33](https://github.com/wwagner33)
+- LinkedIn: [your-linkedin-profile](https://www.linkedin.com/in/your-linkedin-profile)
 
-1. Numbered
-2. List
+## ResearchGate
+Check out my research on:
+- [ResearchGate](https://www.researchgate.net/profile/Wellington-Wagner-Ferreira-Sarmento)
+- [Currículo Lattes/CNPq](http://lattes.cnpq.br/1015561507843037)
 
-## Páginas
-
-[Planetário Interativo](https://github.com/wwagner33/wwagner33.github.io/planetarium.html)
-[Ladrilho Interativo](https://github.com/wwagner33/wwagner33.github.io/ladrilho.html)
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/wwagner33/wwagner33.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+---
+“The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.” (Mark Weiser)
