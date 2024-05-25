@@ -18,7 +18,11 @@
 - Virtual Learning Environments
 
 ## Introduction
-As a doctoral student in Electrical Engineering (2020 - present), I serve as a Professor (Professor Adjunto IV) in the Digital Systems and Media course at Universidade Federal do Ceará (Federal University of Ceará). My research focuses on Virtual Learning Environments (VLE), Ubiquitous Learning, IoT, and Application Frameworks. I am a co-creator of the VLEs Solar, Solar Mobilis, and Socrates.
+As a doctoral student in Electrical Engineering (2020 - present), I serve as a Professor (Professor Adjunto IV) in the Digital Systems and Media course at Universidade Federal do Ceará (Federal University of Ceará). 
+
+My research focuses on Virtual Learning Environments (VLE), Ubiquitous Learning, IoT, and Application Frameworks. 
+
+I am a co-creator of the VLEs [Solar](http://solar.virtual.ufc.br), Solar Mobilis, and Socrates.
 
 ## Disciplines
 - Multimedia Programming
@@ -40,6 +44,7 @@ Feel free to reach out to me:
 Check out my research on:
 - [ResearchGate](https://www.researchgate.net/profile/Wellington-Wagner-Ferreira-Sarmento)
 - [Currículo Lattes/CNPq](http://lattes.cnpq.br/1015561507843037)
+- [Hugging Face](https://huggingface.co/wwagner33)
 
 ---
 “The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.” (Mark Weiser)
