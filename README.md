@@ -26,16 +26,8 @@ As a doctoral student in Electrical Engineering (2020 - present), I serve as a P
 - Computer Networks
 - Operating Systems
 - Artificial Intelligence
-- Programming for Embeded System
+- Programming for Embedded System
 
-## Skills and Expertise
-- Virtual Learning Environments
-- Ubiquitous Computing
-- Computational Intelligence
-- Distance Education
-- Swarm Intelligence
-- Marxism
-- Mobile Technology
 
 ## Contact
 Feel free to reach out to me:
