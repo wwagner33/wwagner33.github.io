@@ -11,7 +11,8 @@
 - Software Development
 - Computational Intelligence
 - Distance Education
-- Swarm Intelligence
+- Reinforcement Learning
+- Swarm UAV and Bio-Inspired Algorithm
 - Marxism Theory
 - Mobile Technology
 - Virtual Learning Environments
