@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo de JavaScript</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Neutrals -->
+    <!-- Application Structure Plan: A single-page application structured as a step-by-step interactive quiz. It displays one question at a time to maintain user focus. Key components include a progress bar, a question card with formatted code, clickable answer options, and an immediate feedback area for rationales. Navigation is handled by 'Next' and 'Previous' buttons. After the final question, a results screen appears with the user's score and options to restart or review. This single-question flow was chosen over a long list to reduce cognitive load, make the experience more engaging, and allow instant feedback, which is crucial for effective learning. -->
+    <!-- Visualization & Content Choices: The core content (15 JavaScript MCQs) is presented through a dynamic card interface. Goal: Assess and teach. Presentation: HTML for structure, TailwindCSS for styling. Each question's code is in a `<pre><code>` block for clarity. Answers are interactive buttons. Interaction: Clicking an answer provides immediate color-coded feedback (green for correct, red for incorrect) and displays the relevant rationale text. A progress bar visually tracks completion. The final score is shown on a summary screen. Justification: This interactive, feedback-driven approach transforms a static test into an active learning tool, reinforcing concepts more effectively than a simple form. Library/Method: Vanilla JavaScript for all logic and state management. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+        .correct {
+            background-color: #D1FAE5 !important;
+            border-color: #10B981 !important;
+            color: #065F46 !important;
+        }
+        .incorrect {
+            background-color: #FEE2E2 !important;
+            border-color: #EF4444 !important;
+            color: #991B1B !important;
+        }
+        .selected {
+             box-shadow: 0 0 0 2px #3B82F6;
+             border-color: #3B82F6;
+        }
+        pre {
+            background-color: #1E293B;
+            color: #E2E8F0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+
+    <div id="app-container" class="w-full max-w-3xl mx-auto">
+        
+        <div id="quiz-view">
+            <header class="mb-6 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-700 mb-2">Quiz de JavaScript: Fundamentos</h1>
+                <p class="text-gray-500">Teste seus conhecimentos sobre as principais instruções da linguagem.</p>
+            </header>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-4">
+                    <p id="progress-text" class="text-sm font-semibold text-gray-600">Questão 1 de 15</p>
+                </div>
+
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                    <div id="progress-bar" class="bg-teal-600 h-2.5 rounded-full" style="width: 6.67%"></div>
+                </div>
+
+                <div id="question-container">
+                    <p id="question-text" class="text-lg md:text-xl font-medium mb-4"></p>
+                    <div id="code-container" class="mb-4"></div>
+                    <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+                </div>
+                
+                <div id="rationale-container" class="mt-5 text-sm p-4 rounded-lg bg-gray-100 border border-gray-200 hidden"></div>
+
+                <div class="flex justify-between mt-8">
+                    <button id="prev-btn" class="py-2 px-5 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Anterior</button>
+                    <button id="next-btn" class="py-2 px-5 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Próximo</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-view" class="hidden text-center bg-white rounded-xl shadow-lg p-8 sm:p-10">
+            <h2 class="text-3xl font-bold text-gray-700 mb-3">Quiz Finalizado!</h2>
+            <p id="score-text" class="text-xl text-gray-600 mb-6">Você acertou 0 de 15 questões.</p>
+            <div class="flex justify-center gap-4">
+                <button id="reset-btn" class="py-2 px-6 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors">Tentar Novamente</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Qual será o resultado exibido no console após a execução do código a seguir?",
+                code: "let x = 10;\nconst y = 20;\nx = y;\nconsole.log(x);",
+                options: ["10", "20", "undefined", "Um erro de sintaxe.", "null"],
+                correct: 1,
+                rationales: [
+                    "A variável `x` foi inicializada com 10, mas seu valor é reatribuído posteriormente.",
+                    "A variável `x`, declarada com `let`, pode ter seu valor reatribuído. Ela recebe o valor da constante `y`.",
+                    "`undefined` é o valor de uma variável que foi declarada, mas não inicializada.",
+                    "O código é sintaticamente válido. A reatribuição de valor a uma variável `let` usando o valor de uma `const` é permitida.",
+                    "`null` representa a ausência intencional de um valor de objeto, o que não é o caso aqui."
+                ]
+            },
+            {
+                question: "Analise o trecho de código abaixo. O que será impresso no console?",
+                code: "console.log(typeof null);",
+                options: ["\"null\"", "\"undefined\"", "\"object\"", "\"string\"", "Um erro."],
+                correct: 2,
+                rationales: [
+                    "Embora `null` seja um tipo primitivo, o operador `typeof` não retorna a string \"null\".",
+                    "`undefined` e `null` são tipos primitivos distintos, e `typeof` os diferencia.",
+                    "Este é um comportamento conhecido e uma peculiaridade histórica do JavaScript. O `typeof null` retorna \"object\".",
+                    "`typeof` retorna o tipo do valor fornecido, e o tipo de `null` não é uma string.",
+                    "A expressão `typeof null` é uma operação válida em JavaScript e não gera um erro."
+                ]
+            },
+            {
+                question: "Qual é a saída do seguinte código?",
+                code: "let a;\nconsole.log(a);",
+                options: ["null", "undefined", "ReferenceError", "0", "\"\""],
+                correct: 1,
+                rationales: [
+                    "`null` indica uma ausência de valor atribuída de forma intencional, o que não ocorreu aqui.",
+                    "Uma variável declarada com `let` mas sem um valor de inicialização tem o valor `undefined` por padrão.",
+                    "Um `ReferenceError` ocorreria se tentássemos acessar uma variável que não foi declarada.",
+                    "O valor padrão para uma variável não inicializada não é o número 0.",
+                    "Uma string vazia é um valor válido, mas não é o valor padrão de uma variável não inicializada."
+                ]
+            },
+            {
+                question: "Qual valor a função `verificarNumero` retornará ao ser chamada com o argumento 5?",
+                code: "function verificarNumero(num) {\n  if (num > 10) {\n    return \"Maior que 10\";\n  } else {\n    return \"Menor ou igual a 10\";\n  }\n}\nconsole.log(verificarNumero(5));",
+                options: ["\"Maior que 10\"", "\"Menor ou igual a 10\"", "undefined", "true", "false"],
+                correct: 1,
+                rationales: [
+                    "A condição `num > 10` é avaliada como falsa quando `num` é 5, portanto o bloco `if` não é executado.",
+                    "Como a condição `5 > 10` é falsa, o código dentro do bloco `else` é executado, retornando esta string.",
+                    "A função possui cláusulas `return` para ambos os casos da condição, então ela sempre retornará um valor de string.",
+                    "A função não retorna um valor booleano, mas sim um dos valores de string especificados.",
+                    "A função não foi projetada para retornar um valor booleano, mas sim uma string descritiva."
+                ]
+            },
+            {
+                question: "Qual o resultado da expressão `Number('10') + 5` no console?",
+                code: null,
+                options: ["\"105\"", "15", "NaN", "Um erro.", "\"15\""],
+                correct: 1,
+                rationales: [
+                    "Isso aconteceria se fosse uma concatenação de strings, mas a função `Number()` altera o tipo do dado.",
+                    "A função `Number('10')` converte a string '10' para o número 10. A operação subsequente é uma soma aritmética.",
+                    "`NaN` (Not a Number) seria o resultado se a string não pudesse ser convertida em um número, como `Number('abc')`.",
+                    "A conversão explícita de tipo usando `Number()` seguida de uma operação matemática é uma prática válida.",
+                    "O resultado da operação aritmética é um número, não uma string."
+                ]
+            },
+            {
+                question: "O que será exibido no console após a execução do laço `while` abaixo?",
+                code: "let i = 0;\nlet resultado = '';\nwhile (i < 3) {\n  resultado += i;\n  i++;\n}\nconsole.log(resultado);",
+                options: ["\"012\"", "\"123\"", "\"3\"", "\"0123\"", "6"],
+                correct: 0,
+                rationales: [
+                    "O laço concatena o valor de `i` à string `resultado` em cada iteração (0, 1 e 2) antes de a condição se tornar falsa.",
+                    "A contagem começa em 0, não em 1. O laço para antes que `i` se torne 3.",
+                    "O valor final de `i` é 3, mas o `console.log` exibe a string `resultado` que foi construída durante as iterações.",
+                    "A condição do laço é `i < 3`. Quando `i` é 3, a condição é falsa e o laço não executa.",
+                    "A operação `+=` em uma string resulta em concatenação, não em soma aritmética."
+                ]
+            },
+            {
+                question: "Qual é a saída do código que utiliza um laço `for...of`?",
+                code: "const cores = ['vermelho', 'verde', 'azul'];\nfor (const cor of cores) {\n  console.log(cor);\n}",
+                options: ["0, 1, 2", "'v', 'v', 'a'", "'vermelho', 'verde', 'azul' (em linhas separadas)", "Um erro, pois `const` não pode ser usado em um laço.", "O array `['vermelho', 'verde', 'azul']` três vezes."],
+                correct: 2,
+                rationales: [
+                    "Estes são os índices do array. O laço `for...of` itera sobre os valores, não sobre os índices.",
+                    "O laço itera sobre os elementos completos do array, não sobre o primeiro caractere de cada elemento.",
+                    "O laço `for...of` foi projetado para iterar diretamente sobre os valores de um objeto iterável, como um array.",
+                    "É perfeitamente válido usar `const` em um laço `for...of`, pois uma nova variável é criada a cada iteração.",
+                    "O laço imprime cada elemento individualmente, não o array inteiro a cada vez."
+                ]
+            },
+            {
+                question: "Considere o objeto `carro` e o laço `for...in`. O que será impresso no console?",
+                code: "const carro = { marca: 'Ford', modelo: 'Mustang', ano: 1969 };\nlet texto = '';\nfor (let x in carro) {\n  texto += carro[x] + ' ';\n}\nconsole.log(texto);",
+                options: ["'marca modelo ano '", "'Ford Mustang 1969 '", "Um erro, pois objetos não são iteráveis com `for...in`.", "'{ marca: 'Ford' } { modelo: 'Mustang' } { ano: 1969 } '", "undefined undefined undefined"],
+                correct: 1,
+                rationales: [
+                    "O laço `for...in` itera sobre as chaves (propriedades) do objeto. O código acessa o valor correspondente a cada chave.",
+                    "Dentro do laço, `carro[x]` acessa o valor de cada propriedade (`'Ford'`, `'Mustang'`, `1969`), que são concatenados na variável `texto`.",
+                    "O laço `for...in` é especificamente projetado para iterar sobre as propriedades enumeráveis de um objeto.",
+                    "O código concatena os valores das propriedades, não objetos representando cada par chave-valor.",
+                    "As chaves `x` são válidas, portanto `carro[x]` acessa valores definidos."
+                ]
+            },
+            {
+                question: "Qual será o valor final da variável `soma` após a execução do método `forEach`?",
+                code: "const numeros = [10, 20, 30];\nlet soma = 0;\nnumeros.forEach(function(valor) {\n  soma += valor;\n});\nconsole.log(soma);",
+                options: ["0", "60", "undefined", "6", "Um erro, pois `forEach` não pode modificar variáveis externas."],
+                correct: 1,
+                rationales: [
+                    "A variável `soma` é inicializada com 0, mas seu valor é modificado dentro da função de callback do `forEach`.",
+                    "O método `forEach` executa a função de callback para cada elemento do array, somando 10, 20 e 30 à variável `soma`.",
+                    "O método `forEach` em si retorna `undefined`, mas a variável `soma` é modificada por efeito colateral e retém o valor numérico.",
+                    "A soma aritmética dos elementos é 60 (10 + 20 + 30), não 6.",
+                    "Uma função de callback dentro do `forEach` pode acessar e modificar variáveis de um escopo superior (closure)."
+                ]
+            },
+            {
+                question: "O que a instrução `switch` exibirá no console? (Assuma que o código foi executado em uma terça-feira, onde `new Date().getDay()` retorna 2)",
+                code: "let dia = 2; // Simulação para terça-feira\nlet texto;\nswitch (dia) {\n  case 6:\n    texto = \"Hoje é Sábado\";\n    break;\n  case 0:\n    texto = \"Hoje é Domingo\";\n    break;\n  default:\n    texto = \"Ansioso pelo fim de semana!\";\n}\nconsole.log(texto);",
+                options: ["\"Hoje é Sábado\"", "\"Hoje é Domingo\"", "\"Ansioso pelo fim de semana!\"", "undefined", "Um erro."],
+                correct: 2,
+                rationales: [
+                    "Este bloco só seria executado se o valor de `dia` fosse 6.",
+                    "Este bloco só seria executado se o valor de `dia` fosse 0.",
+                    "Como o valor de `dia` (2) não corresponde a nenhum dos `case` (6 ou 0), o bloco `default` é executado.",
+                    "A cláusula `default` garante que a variável `texto` receba um valor, mesmo que nenhum `case` corresponda.",
+                    "A sintaxe da instrução `switch` está correta e a lógica é válida."
+                ]
+            },
+            {
+                question: "Qual é a saída do seguinte laço `do...while`?",
+                code: "let i = 5;\nlet texto = \"\";\ndo {\n  texto += i;\n  i++;\n} while (i < 5);\nconsole.log(texto);",
+                options: ["Uma string vazia.", "\"5\"", "\"6\"", "Um laço infinito.", "undefined"],
+                correct: 1,
+                rationales: [
+                    "A principal característica do laço `do...while` é que seu bloco de código é executado antes da verificação da condição.",
+                    "O bloco do laço é executado uma vez, concatenando `5` à variável `texto`. A condição `i < 5` (agora 6 < 5) é então avaliada como falsa, e o laço termina.",
+                    "O valor de `i` é incrementado para 6, mas o valor concatenado à string foi 5.",
+                    "A variável `i` está sendo incrementada, então a condição `i < 5` eventualmente se tornará (e já é inicialmente) falsa.",
+                    "A variável `texto` é inicializada e modificada, então seu valor é uma string definida."
+                ]
+            },
+            {
+                question: "O que o `console.log` exibirá após a execução deste código?",
+                code: "function calcular() {\n  let x = 10;\n  return;\n  const y = 20; \n}\nconsole.log(calcular());",
+                options: ["10", "20", "null", "undefined", "Um erro."],
+                correct: 3,
+                rationales: [
+                    "A função encontra a instrução `return` e termina sua execução imediatamente, sem retornar o valor de `x`.",
+                    "O código após a instrução `return` nunca é alcançado ou executado.",
+                    "A função retorna, mas não com um valor nulo explícito.",
+                    "Uma instrução `return` sem um valor especificado faz com que a função retorne `undefined`.",
+                    "O código é sintaticamente válido, embora o código após o `return` seja inalcançável."
+                ]
+            },
+            {
+                question: "Analise o trecho de código. Qual será o valor de `resultado`?",
+                code: "const obj = { a: 1 };\nconst arr = [1];\n\nconst resultado = (typeof obj === typeof arr);\nconsole.log(resultado);",
+                options: ["true", "false", "\"object\"", "Um erro.", "undefined"],
+                correct: 0,
+                rationales: [
+                    "Tanto `typeof obj` (um objeto literal) quanto `typeof arr` (um array) retornam a string \"object\". Portanto, a comparação é verdadeira.",
+                    "Embora sejam tipos de dados diferentes em um nível mais alto, o operador `typeof` os classifica da mesma forma.",
+                    "A expressão compara os resultados de duas operações `typeof`, resultando em um booleano, não na string \"object\".",
+                    "A comparação de tipos usando `typeof` é uma operação válida em JavaScript.",
+                    "A comparação resulta em um valor booleano bem definido, `true` ou `false`."
+                ]
+            },
+            {
+                question: "Qual será a saída no console do código abaixo?",
+                code: "console.log(1 / 0);",
+                options: ["0", "null", "Um erro `DivisionByZeroError`.", "undefined", "Infinity"],
+                correct: 4,
+                rationales: [
+                    "A divisão por zero em muitas linguagens de programação resulta em um erro, mas JavaScript tem um comportamento específico.",
+                    "`null` representa a ausência intencional de valor, o que não se aplica ao resultado de uma operação matemática.",
+                    "JavaScript não lança um erro para divisão por zero com números de ponto flutuante; em vez disso, retorna um valor numérico especial.",
+                    "`undefined` é o tipo de uma variável não inicializada, não o resultado de uma operação aritmética.",
+                    "De acordo com a especificação de ponto flutuante IEEE 754, que o JavaScript segue, a divisão de um número positivo por zero resulta em `Infinity`."
+                ]
+            },
+            {
+                question: "O que será impresso no console por este trecho de código?",
+                code: "const pessoa = new Object();\npessoa.nome = 'Ana';\n\nconst novaPessoa = pessoa;\nnovaPessoa.nome = 'Bia';\n\nconsole.log(pessoa.nome);",
+                options: ["'Ana'", "'Bia'", "undefined", "Um erro.", "null"],
+                correct: 1,
+                rationales: [
+                    "Quando `novaPessoa` é atribuída a `pessoa`, ela não cria uma cópia do objeto, mas sim uma referência ao mesmo objeto na memória.",
+                    "Ambas as variáveis, `pessoa` e `novaPessoa`, apontam para o mesmo objeto. Modificar a propriedade `nome` através de `novaPessoa` altera o objeto original.",
+                    "A propriedade `nome` do objeto `pessoa` foi definida e posteriormente modificada, então ela tem um valor.",
+                    "A atribuição de objetos e a modificação de suas propriedades são operações válidas em JavaScript.",
+                    "A propriedade do objeto não foi definida como nula; ela foi alterada de uma string para outra."
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const questionText = document.getElementById('question-text');
+        const codeContainer = document.getElementById('code-container');
+        const optionsContainer = document.getElementById('options-container');
+        const rationaleContainer = document.getElementById('rationale-container');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const quizView = document.getElementById('quiz-view');
+        const resultsView = document.getElementById('results-view');
+        const scoreText = document.getElementById('score-text');
+        const resetBtn = document.getElementById('reset-btn');
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers.fill(null);
+            quizView.style.display = 'block';
+            resultsView.style.display = 'none';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            rationaleContainer.classList.add('hidden');
+            const currentQuestion = quizData[currentQuestionIndex];
+            
+            progressText.textContent = `Questão ${currentQuestionIndex + 1} de ${quizData.length}`;
+            progressBar.style.width = `${((currentQuestionIndex + 1) / quizData.length) * 100}%`;
+            questionText.textContent = currentQuestion.question;
+
+            codeContainer.innerHTML = '';
+            if (currentQuestion.code) {
+                const pre = document.createElement('pre');
+                const code = document.createElement('code');
+                code.textContent = currentQuestion.code;
+                pre.appendChild(code);
+                codeContainer.appendChild(pre);
+            }
+
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn', 'w-full', 'text-left', 'p-4', 'border', 'rounded-lg', 'bg-gray-50', 'hover:bg-gray-100', 'border-gray-300');
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            updateNavButtons();
+            
+            if (userAnswers[currentQuestionIndex] !== null) {
+                showAnswerFeedback(userAnswers[currentQuestionIndex]);
+            }
+        }
+        
+        function selectAnswer(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; 
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            showAnswerFeedback(selectedIndex);
+        }
+
+        function showAnswerFeedback(selectedIndex) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            const isCorrect = selectedIndex === currentQuestion.correct;
+            
+            if (isCorrect && userAnswers[currentQuestionIndex] === selectedIndex && !document.querySelector('.correct')) {
+                 score++;
+            }
+
+            const buttons = optionsContainer.querySelectorAll('button');
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === currentQuestion.correct) {
+                    button.classList.add('correct');
+                }
+                if (index === selectedIndex) {
+                    button.classList.add('selected');
+                    if (!isCorrect) {
+                        button.classList.add('incorrect');
+                    }
+                }
+            });
+            
+            rationaleContainer.textContent = `Justificativa: ${currentQuestion.rationales[selectedIndex]}`;
+            rationaleContainer.classList.remove('hidden');
+
+            updateNavButtons();
+        }
+
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.textContent = 'Ver Resultado';
+            } else {
+                nextBtn.textContent = 'Próximo';
+            }
+            nextBtn.disabled = userAnswers[currentQuestionIndex] === null;
+        }
+
+        function handleNext() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function handlePrev() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function showResults() {
+            quizView.style.display = 'none';
+            resultsView.style.display = 'block';
+            let correctCount = 0;
+            userAnswers.forEach((answer, index) => {
+                if(answer === quizData[index].correct) {
+                    correctCount++;
+                }
+            });
+            scoreText.textContent = `Você acertou ${correctCount} de ${quizData.length} questões.`;
+        }
+        
+        nextBtn.addEventListener('click', handleNext);
+        prevBtn.addEventListener('click', handlePrev);
+        resetBtn.addEventListener('click', startQuiz);
+
+        document.addEventListener('DOMContentLoaded', startQuiz);
+    </script>
+</body>
+</html>
