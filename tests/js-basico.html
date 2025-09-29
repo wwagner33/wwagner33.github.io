@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Interativo de JavaScript</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Calm Neutrals -->
-    <!-- Application Structure Plan: A single-page application structured as a step-by-step interactive quiz. It displays one question at a time to maintain user focus. Key components include a progress bar, a question card with formatted code, clickable answer options, and an immediate feedback area for rationales. Navigation is handled by 'Next' and 'Previous' buttons. After the final question, a results screen appears with the user's score and options to restart or review. This single-question flow was chosen over a long list to reduce cognitive load, make the experience more engaging, and allow instant feedback, which is crucial for effective learning. -->
-    <!-- Visualization & Content Choices: The core content (15 JavaScript MCQs) is presented through a dynamic card interface. Goal: Assess and teach. Presentation: HTML for structure, TailwindCSS for styling. Each question's code is in a `<pre><code>` block for clarity. Answers are interactive buttons. Interaction: Clicking an answer provides immediate color-coded feedback (green for correct, red for incorrect) and displays the relevant rationale text. A progress bar visually tracks completion. The final score is shown on a summary screen. Justification: This interactive, feedback-driven approach transforms a static test into an active learning tool, reinforcing concepts more effectively than a simple form. Library/Method: Vanilla JavaScript for all logic and state management. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -57,6 +53,10 @@
             <header class="mb-6 text-center">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-700 mb-2">Quiz de JavaScript: Fundamentos</h1>
                 <p class="text-gray-500">Teste seus conhecimentos sobre as principais instruções da linguagem.</p>
+                <p>
+                    Este questionário foi projetado para testar e aprofundar seu conhecimento sobre as instruções fundamentais e palavras reservadas do JavaScript. Todos os trechos de código fornecidos são autônomos e podem ser executados diretamente no console de desenvolvedor do seu navegador, como Google Chrome ou Mozilla Firefox. O uso do console é uma habilidade essencial para qualquer desenvolvedor JavaScript, pois ele fornece um ambiente interativo para testar, depurar e experimentar o código em tempo real. Para abrir o console, você pode usar o atalho de teclado Ctrl+Shift+J (no Windows/Linux) ou Cmd+Option+J (no Mac) na maioria dos navegadores.1 Uma vez aberto, basta copiar o código de uma questão, colá-lo no console e pressionar
+Enter para ver o resultado. Este ambiente funciona como um REPL (Read-Eval-Print Loop), permitindo não apenas verificar as respostas, mas também modificar variáveis e testar variações do código para solidificar sua compreensão.3 Para consulta de sintaxe e aprofundamento, a Mozilla Developer Network (MDN) é a referência recomendada.4
+                </p>
             </header>
 
             <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
